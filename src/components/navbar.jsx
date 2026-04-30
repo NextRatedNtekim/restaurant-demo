@@ -223,7 +223,7 @@ function Navbar() {
                 whileTap={{ scale: 0.96 }}
                 transition={{ duration: 0.2 }}
               >
-                <Link to="/order" >CHECK ORDERS </Link>
+                <Link to="/order" >ORDERS </Link>
               </motion.span>
             
           </motion.div>

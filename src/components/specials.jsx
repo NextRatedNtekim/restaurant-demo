@@ -150,8 +150,8 @@ export default function SpecialsSection() {
   const [headerRef, headerVis] = useInView(0.2);
 
   return (
-    <section style={{ background: "#080604", padding: "90px 0", borderTop: "1px solid rgba(200,169,126,0.1)" }}
-    className="relative z-20"
+    <section style={{ padding: "90px 0", borderTop: "1px solid rgba(200,169,126,0.1)" }}
+    className="relative z-20 bg-black/90"
     >
       <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 24px" }}>
 
@@ -173,8 +173,9 @@ export default function SpecialsSection() {
               Tonight's <em style={{ fontStyle: "italic", color: "#c8a97e" }}>Highlights</em>
             </h2>
           </div>
-          <a
-            href="#"
+          <div
+            onClick={() => navigate("/menu")}
+            className="cursor-pointer"
             style={{
               fontFamily: "'Josefin Sans',sans-serif", fontSize: 9, letterSpacing: "0.25em", textTransform: "uppercase",
               color: "#c8a97e", borderBottom: "1px solid rgba(200,169,126,0.4)", paddingBottom: 4, textDecoration: "none",
@@ -184,7 +185,7 @@ export default function SpecialsSection() {
             onMouseLeave={e => e.target.style.borderColor = "rgba(200,169,126,0.4)"}
           >
             Full Menu →
-          </a>
+          </div>
         </div>
 
         {/* Grid */}

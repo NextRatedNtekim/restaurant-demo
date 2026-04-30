@@ -340,8 +340,10 @@ export default function MealSlideshow() {
 
       <section
         id="menu"
-        style={{ background: "#0a0805", paddingTop: 80, paddingBottom: 80, overflow: "hidden" }}
-        className="z-20 relative"
+        // #0a0805
+        style={{ background: "", paddingTop: 80, paddingBottom: 80, overflow: "hidden" }}
+        className="z-20 relative bg-black/80"
+
       >
         {/* Header */}
         <div style={{ textAlign: "center", marginBottom: 52, padding: "0 24px" }}>

@@ -75,8 +75,8 @@ export default function AboutSection() {
   return (
     <section 
     id="about" 
-    style={{ background: "#0d0b08", color: "#f0ece4", fontFamily: "'Josefin Sans',sans-serif", overflow: "hidden" }}
-    className="relative z-20"
+    style={{  color: "#f0ece4", fontFamily: "'Josefin Sans',sans-serif", overflow: "hidden" }}
+    className="relative z-20 bg-black/80"
     >
 
       {/* ── STATS BAR ── */}
