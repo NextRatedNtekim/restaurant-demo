@@ -21,16 +21,15 @@ const OrderRow = forwardRef(function OrderRow({ item, onIncrease, onDecrease, on
 
   return (
     <motion.div
-      ref={ref}          // ← add this
+      ref={ref}
       layout
       initial={{ opacity: 0, x: 24 }}
       animate={{ opacity: removing ? 0 : 1, x: removing ? -40 : 0 }}
       exit={{ opacity: 0, x: -40, height: 0, marginBottom: 0 }}
-      transition={{ duration: 0.32, ease: "easeInOut" }}      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: "16px",
-        padding: "16px 20px",
+      transition={{ duration: 0.32, ease: "easeInOut" }}
+      className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-3"
+      style={{
+        padding: "16px",
         background: "rgba(255,255,255,0.025)",
         border: "1px solid rgba(255,255,255,0.06)",
         borderRadius: "16px",
@@ -38,108 +37,112 @@ const OrderRow = forwardRef(function OrderRow({ item, onIncrease, onDecrease, on
         overflow: "hidden",
       }}
     >
-      {/* Thumbnail */}
-      <div style={{ width: 64, height: 64, flexShrink: 0, borderRadius: 12, overflow: "hidden", position: "relative" }}>
-        <img
-          src={`${item.strMealThumb}/preview`}
-          alt={item.strMeal}
-          style={{ width: "100%", height: "100%", objectFit: "cover" }}
-          loading="lazy"
-        />
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.35), transparent)" }} />
-      </div>
+      {/* Top row on mobile: thumbnail + name + remove */}
+      <div className="flex items-center gap-3 sm:contents">
+        {/* Thumbnail */}
+        <div style={{ width: 56, height: 56, flexShrink: 0, borderRadius: 12, overflow: "hidden", position: "relative" }} className="sm:!w-16 sm:!h-16">
+          <img
+            src={`${item.strMealThumb}/preview`}
+            alt={item.strMeal}
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            loading="lazy"
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.35), transparent)" }} />
+        </div>
 
-      {/* Info */}
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ fontFamily: serif, fontSize: 16, fontWeight: 500, color: "rgba(255,255,255,0.88)", margin: "0 0 4px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-          {item.strMeal}
-        </p>
-        <p style={{ fontFamily: sans, fontSize: 10, letterSpacing: "0.14em", textTransform: "uppercase", color: "rgba(255,255,255,0.3)", margin: 0 }}>
-          {item.strArea} · {item.strCategory}
-        </p>
-      </div>
+        {/* Info */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <p style={{ fontFamily: serif, fontSize: 16, fontWeight: 500, color: "rgba(255,255,255,0.88)", margin: 0, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+            {item.strMeal}
+          </p>
+        </div>
 
-      {/* Qty controls */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+        {/* Remove — shown here on mobile, moves to the end on larger screens */}
         <button
-          onClick={() => onDecrease(item.idMeal)}
+          onClick={handleRemove}
+          aria-label="Remove item"
           style={{
-            width: 28, height: 28, borderRadius: "50%",
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.1)",
+            flexShrink: 0, width: 40, height: 40, borderRadius: "50%",
+            background: "transparent", border: "none",
             display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", transition: "all 0.2s",
-            color: "rgba(255,255,255,0.45)",
+            cursor: "pointer", color: "rgba(255,255,255,0.28)", transition: "color 0.2s",
           }}
-          onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)"; e.currentTarget.style.color = "rgba(255,255,255,0.8)"; }}
-          onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.45)"; }}
+          className="sm:order-4"
+          onMouseEnter={e => e.currentTarget.style.color = "#e87070"}
+          onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.28)"}
         >
-          <Minus size={11} />
-        </button>
-
-        <AnimatePresence mode="wait">
-          <motion.span
-            key={item.qty}
-            initial={{ opacity: 0, y: 5, scale: 0.85 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -5, scale: 0.85 }}
-            transition={{ duration: 0.18 }}
-            style={{ fontFamily: sans, fontSize: 13, fontWeight: 500, color: "rgba(255,255,255,0.75)", minWidth: 20, textAlign: "center" }}
-          >
-            {item.qty}
-          </motion.span>
-        </AnimatePresence>
-
-        <button
-          onClick={() => onIncrease(item.idMeal)}
-          style={{
-            width: 28, height: 28, borderRadius: "50%",
-            background: "rgba(200,169,126,0.1)",
-            border: "1px solid rgba(200,169,126,0.25)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            cursor: "pointer", transition: "all 0.2s",
-            color: "#c8a97e",
-          }}
-          onMouseEnter={e => { e.currentTarget.style.background = "rgba(200,169,126,0.22)"; e.currentTarget.style.borderColor = "rgba(200,169,126,0.55)"; }}
-          onMouseLeave={e => { e.currentTarget.style.background = "rgba(200,169,126,0.1)"; e.currentTarget.style.borderColor = "rgba(200,169,126,0.25)"; }}
-        >
-          <Plus size={11} />
+          <Trash2 size={16} />
         </button>
       </div>
 
-      {/* Line total */}
-      <div style={{ flexShrink: 0, textAlign: "right", minWidth: 72 }}>
-        <AnimatePresence mode="wait">
-          <motion.p
-            key={item.qty}
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            style={{ fontFamily: sans, fontSize: 14, fontWeight: 400, color: "#c8a97e", margin: "0 0 3px" }}
+      {/* Bottom row on mobile: qty controls + line total */}
+      <div className="flex items-center justify-between sm:justify-end sm:flex-1 sm:gap-6">
+        {/* Qty controls */}
+        <div className="flex items-center gap-3">
+          <button
+            onClick={() => onDecrease(item.idMeal)}
+            aria-label="Decrease quantity"
+            style={{
+              width: 36, height: 36, borderRadius: "50%",
+              background: "rgba(255,255,255,0.04)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "all 0.2s",
+              color: "rgba(255,255,255,0.45)",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.28)"; e.currentTarget.style.color = "rgba(255,255,255,0.8)"; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)"; e.currentTarget.style.color = "rgba(255,255,255,0.45)"; }}
           >
-            ${(item.price * item.qty).toFixed(2)}
-          </motion.p>
-        </AnimatePresence>
-        <p style={{ fontFamily: sans, fontSize: 9, color: "rgba(255,255,255,0.2)", letterSpacing: "0.1em", margin: 0 }}>
-          ${item.price.toFixed(2)} each
-        </p>
-      </div>
+            <Minus size={13} />
+          </button>
 
-      {/* Remove */}
-      <button
-        onClick={handleRemove}
-        style={{
-          flexShrink: 0, width: 30, height: 30, borderRadius: "50%",
-          background: "transparent", border: "none",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          cursor: "pointer", color: "rgba(255,255,255,0.18)", transition: "color 0.2s",
-        }}
-        onMouseEnter={e => e.currentTarget.style.color = "#e87070"}
-        onMouseLeave={e => e.currentTarget.style.color = "rgba(255,255,255,0.18)"}
-      >
-        <Trash2 size={14} />
-      </button>
+          <AnimatePresence mode="wait">
+            <motion.span
+              key={item.qty}
+              initial={{ opacity: 0, y: 5, scale: 0.85 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -5, scale: 0.85 }}
+              transition={{ duration: 0.18 }}
+              style={{ fontFamily: sans, fontSize: 14, fontWeight: 500, color: "rgba(255,255,255,0.75)", minWidth: 20, textAlign: "center" }}
+            >
+              {item.qty}
+            </motion.span>
+          </AnimatePresence>
+
+          <button
+            onClick={() => onIncrease(item.idMeal)}
+            aria-label="Increase quantity"
+            style={{
+              width: 36, height: 36, borderRadius: "50%",
+              background: "rgba(200,169,126,0.1)",
+              border: "1px solid rgba(200,169,126,0.25)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              cursor: "pointer", transition: "all 0.2s",
+              color: "#c8a97e",
+            }}
+            onMouseEnter={e => { e.currentTarget.style.background = "rgba(200,169,126,0.22)"; e.currentTarget.style.borderColor = "rgba(200,169,126,0.55)"; }}
+            onMouseLeave={e => { e.currentTarget.style.background = "rgba(200,169,126,0.1)"; e.currentTarget.style.borderColor = "rgba(200,169,126,0.25)"; }}
+          >
+            <Plus size={13} />
+          </button>
+        </div>
+
+        {/* Line total */}
+        <div style={{ flexShrink: 0, textAlign: "right", minWidth: 64 }}>
+          <AnimatePresence mode="wait">
+            <motion.p
+              key={item.qty}
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.18 }}
+              style={{ fontFamily: sans, fontSize: 15, fontWeight: 400, color: "#c8a97e", margin: 0 }}
+            >
+              ${(item.price * item.qty).toFixed(2)}
+            </motion.p>
+          </AnimatePresence>
+        </div>
+      </div>
     </motion.div>
   );
 });
@@ -264,7 +267,7 @@ export default function CheckOrdersPage() {
     >
       {/* ── LEFT: sticky summary panel ── */}
       <div
-        className="relative flex-shrink-0 h-[52vw] min-h-[200px] max-h-[380px] lg:w-[40%] lg:h-screen lg:max-h-none lg:sticky lg:top-0"
+        className="relative flex-shrink-0 h-[60vw] min-h-[250px] max-h-[380px] lg:w-[40%] lg:h-screen lg:max-h-none lg:sticky lg:top-0"
       >
         <img
           src="https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=1400&q=85"
@@ -274,7 +277,8 @@ export default function CheckOrdersPage() {
         <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.6)" }} />
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(8,8,8,0.92) 0%, rgba(0,0,0,0.15) 55%)" }} />
 
-        <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 32px", textAlign: "center" }}>
+        {/* <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px 32px", textAlign: "center" }}> */}
+        <div className="flex absolute inset-0 items-center justify-center flex-col text-center px-6 py-10 sm:px-10">
           <div style={{ width: 36, height: 1, background: "rgba(255,255,255,0.25)", marginBottom: 20 }} />
           <p style={{ fontFamily: sans, fontSize: 9, letterSpacing: "0.5em", textTransform: "uppercase", color: "rgba(255,255,255,0.35)", marginBottom: 14 }}>
             Your Order
@@ -335,7 +339,7 @@ export default function CheckOrdersPage() {
         </div>
 
         {/* Content */}
-        <div style={{ padding: "36px 24px 120px" }} className="sm:px-10 lg:px-12">
+        <div style={{ padding: "50px 24px 120px" }} className="sm:px-10 lg:px-15">
 
           {/* ── Empty state ── */}
           {cart.length === 0 ? (

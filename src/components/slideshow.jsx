@@ -82,7 +82,7 @@ function MealCard({ meal }) {
 function MarqueeRow({ meals, reverse = false, loading }) {
   const skeletons = Array(8).fill(null);
   const doubled = loading ? [...skeletons, ...skeletons] : [...meals, ...meals];
-  const duration = reverse ? "105s" : "145s";
+  const duration = reverse ? "355s" : "340s";
 
   return (
     <div

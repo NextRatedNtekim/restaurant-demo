@@ -5,6 +5,9 @@
     --color-gold: #ffe998;
     --color-brown: #57370d;
 }
+body{
+    overflow-x: hidden;
+}
 
 @layer components {
     .glass {

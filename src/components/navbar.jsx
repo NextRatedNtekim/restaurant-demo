@@ -157,9 +157,10 @@ function Navbar() {
 
           {/* Mobile: hamburger */}
           <motion.button
-            className="sm:hidden cursor-pointer z-[60] relative w-8 h-8 flex items-center justify-center"
+            className="sm:hidden cursor-pointer z-[60] relative w-11 h-11 -ml-2 flex items-center justify-center"
             onClick={() => setToggleMenu(!toggleMenu)}
             aria-label="Toggle menu"
+            aria-expanded={toggleMenu}
             whileTap={{ scale: 0.88 }}
           >
             <AnimatePresence mode="wait" initial={false}>
@@ -211,7 +212,7 @@ function Navbar() {
           </motion.div>
 
           {/* CTA button */}
-          <motion.div variants={ctaVariants} className="cursor-pointer">
+          <motion.div variants={ctaVariants} className="cursor-pointer hidden sm:block">
             
               <motion.span
                 className="text-[11px] tracking-[0.22em] uppercase border border-white/40 px-4 py-2 rounded-full inline-block"
